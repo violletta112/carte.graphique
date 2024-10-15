@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import folium
 import os
-import streamlit_authenticator as stauth
-import hmac
 from streamlit_folium import st_folium
 
 st.set_page_config(
@@ -127,28 +125,3 @@ if choisir != 'choisir une wilaya':
 with col2:
       # Afficher la carte avec st_folium
        st_folium(m, width=600, height=300)
-
-# Fonction pour vérifier le mot de passe
-def check_password():
-    if "password_correct" not in st.session_state:
-        st.session_state["password_correct"] = False
-
-    username = st.text_input("Nom d'utilisateur", key="username")
-    password = st.text_input("Mot de passe", type="password", key="password")
-
-    if st.button("Se connecter"):
-        if username in st.secrets["passwords"] and hmac.compare_digest(st.secrets["passwords"][username], password):
-            st.session_state["password_correct"] = True
-            st.success("Connexion réussie !")
-        else:
-            st.session_state["password_correct"] = False
-            st.error("Nom d'utilisateur ou mot de passe incorrect")
-
-# Vérifiez si l'utilisateur est connecté
-check_password()
-
-if st.session_state.get("password_correct"):
-    # Code principal de votre application ici
-    st.write("Bienvenue dans l'application !")
-else:
-    st.stop()  # Arrêtez l'exécution si l'utilisateur n'est pas authentifié
